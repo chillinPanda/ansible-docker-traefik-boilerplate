@@ -1,0 +1,64 @@
+---
+- name: Install tools for adding the docker repo
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - software-properties-common
+    - python3-pip
+  tags:
+    - docker
+
+- name: Add Docker s official GPG key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+  tags:
+    - docker
+
+- name: Verify that we have the key with the fingerprint
+  apt_key:
+    id: 0EBFCD88
+    state: present
+  tags:
+    - docker
+
+- name: Set up the stable repository
+  apt_repository:
+    # adjust this for your target!
+    repo: deb [arch=arm64] https://download.docker.com/linux/ubuntu jammy stable
+    state: present
+    update_cache: yes
+  tags:
+    - docker
+
+- name: Update apt packages
+  apt:
+    update_cache: yes
+  tags:
+    - docker
+
+- name: Install docker
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+    - docker-compose-plugin
+  tags:
+    - docker
+
+- name: Run docker as non-root
+  user:
+    name: ubuntu
+    groups: docker
+    append: yes
+  tags:
+    - docker
