@@ -5,3 +5,4 @@
   roles:
     - os
     - docker
+    - traefik

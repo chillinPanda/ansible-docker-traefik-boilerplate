@@ -1,0 +1,44 @@
+---
+- name: Create traefik network
+  docker_network:
+    name: traefiknet
+
+- name: Ensure /opt/traefik exists
+  file:
+    path: /opt/traefik
+    state: directory
+
+- name: Template docker-compose
+  template:
+    src: docker-compose.yml
+    dest: /opt/traefik/docker-compose.yml
+
+- name: Ensure /opt/traefik/etc/traefik exists
+  file:
+    path: /opt/traefik/etc/traefik
+    state: directory
+
+- name: Template /etc/traefik
+  template:
+    src: traefik.yml
+    dest: /opt/traefik/etc/traefik/traefik.yml
+
+- name: Ensure /opt/traefik/config/basic-auth exists
+  file:
+    path: /opt/traefik/config/basic-auth
+    state: directory
+
+- name: Template /config files
+  template:
+    src: usersfile
+    dest: /opt/traefik/config/basic-auth/usersfile
+
+- name: Tear down existing services
+  docker_compose:
+    project_src: /opt/traefik
+    state: absent
+    remove_orphans: yes
+
+- name: Create and start services
+  docker_compose:
+    project_src: /opt/traefik

@@ -1,0 +1,37 @@
+version: "3.9"
+
+volumes:
+  traefik-ssl-certs:
+    driver: local
+
+services:
+  traefik:
+    image: traefik:v2.9.6
+    container_name: traefik
+    networks:
+      - traefiknet
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: unless-stopped
+    volumes:
+      - ./etc/traefik:/etc/traefik
+      - ./config/basic-auth:/config/basic-auth
+      - traefik-ssl-certs:/ssl-certs
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      # router
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`traefik.{{ host_name }}`)"
+      - "traefik.http.routers.api.service=api@internal"
+      # https
+      - "traefik.http.routers.api.tls=true"
+      - "traefik.http.routers.api.tls.certresolver=production"
+      - "traefik.http.routers.api.entrypoints=websecure"
+      # basic auth
+      - "traefik.http.routers.api.middlewares=dashboard-auth"
+      - "traefik.http.middlewares.dashboard-auth.basicauth.usersfile=/config/basic-auth/usersfile"
+
+networks:
+  traefiknet:
+    external: true
