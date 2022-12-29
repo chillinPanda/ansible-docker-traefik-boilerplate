@@ -29,8 +29,7 @@
 
 - name: Set up the stable repository
   apt_repository:
-    # adjust this for your target!
-    repo: deb [arch=arm64] https://download.docker.com/linux/ubuntu jammy stable
+    repo: deb [arch={{ ubuntu_arch }}] https://download.docker.com/linux/ubuntu {{ ubuntu_dist_codename }} stable
     state: present
     update_cache: yes
   tags:
