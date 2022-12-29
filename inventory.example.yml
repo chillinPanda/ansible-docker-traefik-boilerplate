@@ -1,0 +1,10 @@
+all:
+  hosts:
+    example.com:
+      ansible_user: ubuntu
+      ansible_ssh_private_key_file: ~/.ssh/my-private.key
+      host_name: example.com
+      ubuntu_dist_codename: jammy
+      ubuntu_arch: amd64
+      traefik_basic_auth: user:pass
+      traefik_ssl_email: me@example.com
