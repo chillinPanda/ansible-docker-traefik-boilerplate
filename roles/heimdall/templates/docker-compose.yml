@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+  heimdall:
+    image: lscr.io/linuxserver/heimdall
+    container_name: heimdall
+    networks:
+      - traefiknet
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - /opt/heimdall/config:/config
+    restart: unless-stopped
+    labels:
+      # router
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.heimdall.rule=Host(`heimdall.{{ host_name }}`)'
+      # https
+      - 'traefik.http.routers.heimdall.tls=true'
+      - 'traefik.http.routers.heimdall.tls.certresolver=production'
+      - 'traefik.http.routers.heimdall.entrypoints=websecure'
+      # basic auth
+      - 'traefik.http.routers.heimdall.middlewares=heimdall-auth'
+      - "traefik.http.middlewares.heimdall-auth.basicauth.usersfile=/config/basic-auth/usersfile"
+
+networks:
+  traefiknet:
+    external: true
