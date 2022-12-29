@@ -6,5 +6,9 @@ all:
       host_name: example.com
       ubuntu_dist_codename: jammy
       ubuntu_arch: amd64
-      traefik_basic_auth: user:pass
+      traefik_basic_auth:
+        - user: user1
+          password: pass1
+        - user: user2
+          password: pass2
       traefik_ssl_email: me@example.com

@@ -1,4 +1,9 @@
 ---
+- name: Install passlib python lib for basic auth generation
+  pip:
+    name: passlib
+    state: present
+
 - name: Create traefik network
   docker_network:
     name: traefiknet
@@ -28,10 +33,19 @@
     path: /opt/traefik/config/basic-auth
     state: directory
 
-- name: Template /config files
-  template:
-    src: usersfile
-    dest: /opt/traefik/config/basic-auth/usersfile
+- name: Remove password usersfile / clearing it
+  file:
+    path: /opt/traefik/config/basic-auth/usersfile
+    state: absent
+
+- name: Add users to the password usersfile
+  community.general.htpasswd:
+    path: /opt/traefik/config/basic-auth/usersfile
+    name: "{{ item.user }}"
+    password: "{{ item.password }}"
+  with_items: "{{ traefik_basic_auth }}"
+  loop_control:
+    label: "{{ item.user }}"
 
 - name: Tear down existing services
   docker_compose:
