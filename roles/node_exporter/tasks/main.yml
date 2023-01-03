@@ -1,0 +1,20 @@
+---
+- name: Ensure /opt/node_exporter exists
+  file:
+    path: /opt/node_exporter
+    state: directory
+
+- name: Template docker-compose
+  template:
+    src: docker-compose.yml
+    dest: /opt/node_exporter/docker-compose.yml
+
+- name: Tear down existing services
+  docker_compose:
+    project_src: /opt/node_exporter
+    state: absent
+    remove_orphans: yes
+
+- name: Create and start services
+  docker_compose:
+    project_src: /opt/node_exporter
