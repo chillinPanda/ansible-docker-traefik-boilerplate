@@ -1,0 +1,30 @@
+---
+- name: Ensure /opt/prometheus exists
+  file:
+    path: /opt/prometheus
+    state: directory
+
+- name: Template docker-compose
+  template:
+    src: docker-compose.yml
+    dest: /opt/prometheus/docker-compose.yml
+
+- name: Ensure /opt/prometheus/etc/prometheus exists
+  file:
+    path: /opt/prometheus/etc/prometheus
+    state: directory
+
+- name: Template /etc/prometheus
+  template:
+    src: prometheus.yml
+    dest: /opt/prometheus/etc/prometheus/prometheus.yml
+
+- name: Tear down existing services
+  docker_compose:
+    project_src: /opt/prometheus
+    state: absent
+    remove_orphans: yes
+
+- name: Create and start services
+  docker_compose:
+    project_src: /opt/prometheus

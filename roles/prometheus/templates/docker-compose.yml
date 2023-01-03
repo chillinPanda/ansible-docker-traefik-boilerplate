@@ -1,0 +1,36 @@
+version: "3.9"
+
+volumes:
+  prometheus-data:
+    driver: local
+
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    networks:
+      - traefiknet
+    environment:
+      - TZ=Europe/London
+    volumes:
+      - ./etc/prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
+    restart: unless-stopped
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    labels:
+      # router
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.prometheus.rule=Host(`prometheus.{{ host_name }}`)'
+      - 'traefik.http.services.prometheus.loadbalancer.server.port=9090'
+      # https
+      - 'traefik.http.routers.prometheus.tls=true'
+      - 'traefik.http.routers.prometheus.tls.certresolver=production'
+      - 'traefik.http.routers.prometheus.entrypoints=websecure'
+      # basic auth
+      - 'traefik.http.routers.prometheus.middlewares=prometheus-auth'
+      - "traefik.http.middlewares.prometheus-auth.basicauth.usersfile=/config/basic-auth/usersfile"
+
+networks:
+  traefiknet:
+    external: true
