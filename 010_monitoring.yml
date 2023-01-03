@@ -1,0 +1,6 @@
+- name: Monitoring
+  hosts: all
+  become: true
+
+  roles:
+    - grafana

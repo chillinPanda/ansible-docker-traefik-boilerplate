@@ -1,0 +1,20 @@
+---
+- name: Ensure /opt/grafana exists
+  file:
+    path: /opt/grafana
+    state: directory
+
+- name: Template docker-compose
+  template:
+    src: docker-compose.yml
+    dest: /opt/grafana/docker-compose.yml
+
+- name: Tear down existing services
+  docker_compose:
+    project_src: /opt/grafana
+    state: absent
+    remove_orphans: yes
+
+- name: Create and start services
+  docker_compose:
+    project_src: /opt/grafana

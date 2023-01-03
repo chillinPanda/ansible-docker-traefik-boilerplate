@@ -1,0 +1,30 @@
+version: "3.9"
+
+volumes:
+  grafana-data:
+    driver: local
+
+services:
+  grafana:
+    image: grafana/grafana-oss:9.3.2
+    container_name: grafana
+    networks:
+      - traefiknet
+    environment:
+      - TZ=Europe/London
+    volumes:
+      - grafana-data:/var/lib/grafana
+    restart: unless-stopped
+    labels:
+      # router
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.grafana.rule=Host(`grafana.{{ host_name }}`)'
+      - 'traefik.http.services.grafana.loadbalancer.server.port=3000'
+      # https
+      - 'traefik.http.routers.grafana.tls=true'
+      - 'traefik.http.routers.grafana.tls.certresolver=production'
+      - 'traefik.http.routers.grafana.entrypoints=websecure'
+
+networks:
+  traefiknet:
+    external: true

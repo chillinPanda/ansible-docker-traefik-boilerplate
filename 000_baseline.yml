@@ -1,4 +1,4 @@
-- name: Setup server
+- name: Base setup
   hosts: all
   become: true
 
