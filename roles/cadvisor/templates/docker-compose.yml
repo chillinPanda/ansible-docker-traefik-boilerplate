@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.46.0
+    container_name: cadvisor
+    networks:
+      - traefiknet
+    environment:
+      - TZ=Europe/London
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    devices:
+      - /dev/kmsg
+    restart: unless-stopped
+    privileged: true
+
+networks:
+  traefiknet:
+    external: true

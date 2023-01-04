@@ -6,3 +6,4 @@
     - grafana
     - prometheus
     - node_exporter
+    - cadvisor

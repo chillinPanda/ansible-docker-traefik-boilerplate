@@ -1,0 +1,20 @@
+---
+- name: Ensure /opt/cadvisor exists
+  file:
+    path: /opt/cadvisor
+    state: directory
+
+- name: Template docker-compose
+  template:
+    src: docker-compose.yml
+    dest: /opt/cadvisor/docker-compose.yml
+
+- name: Tear down existing services
+  docker_compose:
+    project_src: /opt/cadvisor
+    state: absent
+    remove_orphans: yes
+
+- name: Create and start services
+  docker_compose:
+    project_src: /opt/cadvisor
