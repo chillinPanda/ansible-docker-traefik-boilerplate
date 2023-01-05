@@ -1,0 +1,4 @@
+---
+
+- import_playbook: 000_baseline.yml
+- import_playbook: 010_monitoring.yml

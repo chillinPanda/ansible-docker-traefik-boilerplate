@@ -2,10 +2,10 @@
 
 This is a boilerplate project to kickstart your ansible, docker, traefik setup.
 
-# Run whole playbook
+# Run all playbooks
 
 ```shell
-ansible-playbook site.yml
+ansible-playbook all.yml
 ```
 
 # Configure your inventory
