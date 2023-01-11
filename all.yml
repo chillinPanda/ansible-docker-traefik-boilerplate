@@ -2,3 +2,4 @@
 
 - import_playbook: 000_baseline.yml
 - import_playbook: 010_monitoring.yml
+- import_playbook: 020_examples.yml
