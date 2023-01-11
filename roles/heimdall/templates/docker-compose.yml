@@ -20,9 +20,8 @@ services:
       - 'traefik.http.routers.heimdall.tls=true'
       - 'traefik.http.routers.heimdall.tls.certresolver=production'
       - 'traefik.http.routers.heimdall.entrypoints=websecure'
-      # basic auth
-      - 'traefik.http.routers.heimdall.middlewares=heimdall-auth'
-      - "traefik.http.middlewares.heimdall-auth.basicauth.usersfile=/config/basic-auth/usersfile"
+      # authelia auth
+      - 'traefik.http.routers.heimdall.middlewares=authelia@docker'
 
 networks:
   traefiknet:

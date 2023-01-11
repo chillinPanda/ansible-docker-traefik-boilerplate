@@ -24,6 +24,8 @@ services:
       - 'traefik.http.routers.grafana.tls=true'
       - 'traefik.http.routers.grafana.tls.certresolver=production'
       - 'traefik.http.routers.grafana.entrypoints=websecure'
+      # authelia auth
+      - 'traefik.http.routers.grafana.middlewares=authelia@docker'
 
 networks:
   traefiknet:

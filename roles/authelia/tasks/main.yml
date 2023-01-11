@@ -1,0 +1,35 @@
+---
+- name: Ensure /opt/authelia exists
+  file:
+    path: /opt/authelia
+    state: directory
+
+- name: Template docker-compose
+  template:
+    src: docker-compose.yml
+    dest: /opt/authelia/docker-compose.yml
+
+- name: Ensure /opt/authelia/config exists
+  file:
+    path: /opt/authelia/config
+    state: directory
+
+- name: Template configuration.yml
+  template:
+    src: configuration.yml
+    dest: /opt/authelia/config/configuration.yml
+
+- name: Template users_database.yml
+  template:
+    src: users_database.yml
+    dest: /opt/authelia/config/users_database.yml
+
+- name: Tear down existing services
+  docker_compose:
+    project_src: /opt/authelia
+    state: absent
+    remove_orphans: yes
+
+- name: Create and start services
+  docker_compose:
+    project_src: /opt/authelia

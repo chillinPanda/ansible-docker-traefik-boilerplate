@@ -28,9 +28,8 @@ services:
       - "traefik.http.routers.api.tls=true"
       - "traefik.http.routers.api.tls.certresolver=production"
       - "traefik.http.routers.api.entrypoints=websecure"
-      # basic auth
-      - "traefik.http.routers.api.middlewares=dashboard-auth"
-      - "traefik.http.middlewares.dashboard-auth.basicauth.usersfile=/config/basic-auth/usersfile"
+      # authelia auth
+      - "traefik.http.routers.api.middlewares=authelia@docker"
 
 networks:
   traefiknet:
