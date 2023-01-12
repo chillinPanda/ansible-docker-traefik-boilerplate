@@ -9,6 +9,33 @@
     src: docker-compose.yml
     dest: /opt/grafana/docker-compose.yml
 
+# Provision datasources
+- name: Ensure /opt/grafana/provisioning/datasources exists
+  file:
+    path: /opt/grafana/provisioning/datasources
+    state: directory
+
+- name: Create/Update datasources file
+  template:
+    src: datasources.yml
+    dest: /opt/grafana/provisioning/datasources
+
+# Provision dashboards
+- name: Ensure /opt/grafana/provisioning/dashboards exists
+  file:
+    path: /opt/grafana/provisioning/dashboards
+    state: directory
+
+- name: Create/Update dashboard provider file
+  template:
+    src: dashboard-provider.yml
+    dest: /opt/grafana/provisioning/dashboards
+
+- name: Copy dashboards
+  ansible.builtin.copy:
+    src: templates/dashboards
+    dest: /opt/grafana/
+
 - name: Tear down existing services
   docker_compose:
     project_src: /opt/grafana

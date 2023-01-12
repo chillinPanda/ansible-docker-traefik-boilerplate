@@ -14,6 +14,8 @@ services:
       - TZ=Europe/London
     volumes:
       - grafana-data:/var/lib/grafana
+      - ./provisioning:/etc/grafana/provisioning
+      - ./dashboards:/etc/dashboards
     restart: unless-stopped
     labels:
       # router
