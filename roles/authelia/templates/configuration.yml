@@ -46,6 +46,8 @@ access_control:
       policy: one_factor
     - domain: prometheus.{{ host_name }}
       policy: one_factor
+    - domain: cadvisor.{{ host_name }}
+      policy: one_factor
 {% if authelia.access_control.rules is defined %}
 {% for rule in authelia.access_control.rules %}
     - domain: {{ rule.domain }}

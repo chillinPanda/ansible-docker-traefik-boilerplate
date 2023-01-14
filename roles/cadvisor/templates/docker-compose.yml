@@ -18,6 +18,17 @@ services:
       - /dev/kmsg
     restart: unless-stopped
     privileged: true
+    labels:
+      # router
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.cadvisor.rule=Host(`cadvisor.{{ host_name }}`)'
+      - 'traefik.http.services.cadvisor.loadbalancer.server.port=8080'
+      # https
+      - 'traefik.http.routers.cadvisor.tls=true'
+      - 'traefik.http.routers.cadvisor.tls.certresolver=production'
+      - 'traefik.http.routers.cadvisor.entrypoints=websecure'
+      # authelia auth
+      - 'traefik.http.routers.cadvisor.middlewares=authelia@docker'
 
 networks:
   traefiknet:
