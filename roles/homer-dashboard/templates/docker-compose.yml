@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  homer-dashboard:
+    image: b4bz/homer:v22.11.2
+    container_name: homer-dashboard
+    networks:
+      - traefiknet
+    volumes:
+      - ./config:/www/assets
+    user: 1000:1000
+    environment:
+      - INIT_ASSETS=0
+      - TZ=Europe/London
+    restart: unless-stopped
+    labels:
+      # router
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.homer-dashboard.rule=Host(`dashboard.{{ host_name }}`)'
+      - 'traefik.http.services.homer-dashboard.loadbalancer.server.port=8080'
+      # https
+      - 'traefik.http.routers.homer-dashboard.tls=true'
+      - 'traefik.http.routers.homer-dashboard.tls.certresolver=production'
+      - 'traefik.http.routers.homer-dashboard.entrypoints=websecure'
+      # authelia auth
+      - 'traefik.http.routers.homer-dashboard.middlewares=authelia@docker'
+
+networks:
+  traefiknet:
+    external: true

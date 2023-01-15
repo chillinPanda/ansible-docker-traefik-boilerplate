@@ -1,0 +1,35 @@
+---
+- name: Ensure /opt/homer-dashboard exists
+  file:
+    path: /opt/homer-dashboard
+    state: directory
+
+- name: Ensure /opt/homer-dashboard/config exists
+  file:
+    path: /opt/homer-dashboard/config
+    state: directory
+
+- name: Copy static files
+  ansible.builtin.copy:
+    src: files/
+    dest: /opt/homer-dashboard/config/
+
+- name: Template homer config
+  template:
+    src: config.yml
+    dest: /opt/homer-dashboard/config/config.yml
+
+- name: Template docker-compose
+  template:
+    src: docker-compose.yml
+    dest: /opt/homer-dashboard/docker-compose.yml
+
+- name: Tear down existing services
+  docker_compose:
+    project_src: /opt/homer-dashboard
+    state: absent
+    remove_orphans: yes
+
+- name: Create and start services
+  docker_compose:
+    project_src: /opt/homer-dashboard

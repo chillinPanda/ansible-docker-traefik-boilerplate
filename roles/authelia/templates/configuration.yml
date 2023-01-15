@@ -38,6 +38,8 @@ authentication_backend:
 access_control:
   default_policy: deny
   rules:
+    - domain: dashboard.{{ host_name }}
+      policy: one_factor
     - domain: heimdall.{{ host_name }}
       policy: one_factor
     - domain: traefik.{{ host_name }}
