@@ -6,5 +6,4 @@
     - os
     - docker
     - traefik
-    - heimdall
     - authelia

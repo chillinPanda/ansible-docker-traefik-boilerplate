@@ -40,8 +40,6 @@ access_control:
   rules:
     - domain: dashboard.{{ host_name }}
       policy: one_factor
-    - domain: heimdall.{{ host_name }}
-      policy: one_factor
     - domain: traefik.{{ host_name }}
       policy: two_factor
     - domain: grafana.{{ host_name }}
