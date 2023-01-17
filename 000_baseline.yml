@@ -6,4 +6,5 @@
     - os
     - docker
     - traefik
+    - homer-dashboard
     - authelia
