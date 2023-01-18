@@ -4,11 +4,6 @@
     path: /opt/basic-auth-example
     state: directory
 
-- name: Ensure /opt/basic-auth-example/config exists
-  file:
-    path: /opt/basic-auth-example/config
-    state: directory
-
 - name: Template docker-compose
   template:
     src: docker-compose.yml
