@@ -6,6 +6,7 @@ all:
       host_name: example.com
       ubuntu_dist_codename: jammy
       ubuntu_arch: amd64
+      timezone: Europe/Berlin # OPTIONAL
       traefik_basic_auth:
         - user: user1
           password: pass1
